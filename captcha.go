@@ -1,9 +1,9 @@
 package xcaptcha
 
 import (
+	"bytes"
 	captcha "github.com/steambap/captcha"
 	"image/color"
-	"io"
 )
 
 type Option struct {
@@ -11,7 +11,7 @@ type Option struct {
 	Height int
 	TextLength int
 }
-func New(writer io.Writer, opt Option) (code string, err error) {
+func New(opt Option) (code string, buffer *bytes.Buffer, err error) {
 	if opt.Width == 0 {
 		opt.Width = 150
 		opt.Height = 50
@@ -24,9 +24,12 @@ func New(writer io.Writer, opt Option) (code string, err error) {
 		options.CharPreset = "abcdefghijkmnpqrstuvwxyz23456789"
 		options.TextLength = opt.TextLength
 		return
-	})
+	}) ; if err != nil {
+	    return
+	}
 	code = data.Text
-	err = data.WriteImage(writer) ; if err != nil {
+	buffer = bytes.NewBuffer([]byte(nil))
+	err = data.WriteImage(buffer) ; if err != nil {
 	    return
 	}
 	return
