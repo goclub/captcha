@@ -14,8 +14,9 @@ type Option struct {
 
 func New(opt Option) (code string, buffer *bytes.Buffer, err error) {
 	if opt.Width == 0 {
-		opt.Width = 150
-		opt.Height = 50
+		// retina
+		opt.Width = 150 * 2
+		opt.Height = 50 * 2
 	}
 	if opt.TextLength == 0 {
 		opt.TextLength = 4
